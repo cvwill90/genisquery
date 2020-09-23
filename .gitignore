@@ -1,0 +1,6 @@
+/bin
+/config
+/vendor
+composer.json
+composer.lock
+composer.phar
