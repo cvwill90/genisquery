@@ -1,5 +1,5 @@
 /bin
 /vendor
 composer.phar
-/nbproject/private/
+/nbproject
 .htaccess
