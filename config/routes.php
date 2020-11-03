@@ -18,11 +18,4 @@ return function (App $app){
         $response->getBody()->write('hello world');
         return $response;
     });
-    
-    /*$app->get('/export_internal', function (Request $request, Response $response, array $args)
-    {    
-        echo 'tets';
-        $db = new Database($config['dsn']);
-        return $response;
-    });*/
 };
