@@ -1,7 +1,15 @@
 {
-  "name": "cvwill90/genisquery",
-  "require": {
-    "slim/slim": "4.5.*",
-    "slim/psr7": "1.2.*"
-  }
+    "name": "cvwill90/genisquery",
+    "require": {
+        "slim/slim": "4.5.*",
+        "slim/psr7": "1.2.*",
+        "nyholm/dsn": "2.0.*",
+        "php-di/php-di": "^6.0",
+        "selective/basepath": "1.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Genis\\": "src/"
+        }
+    }
 }
