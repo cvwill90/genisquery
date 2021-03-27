@@ -13,6 +13,7 @@ use Genis\Action as Genis;
 return function (App $app){
     
     $app->post('/export/{export_type}', Genis\DatabaseExportAction::class);
+    $app->get('/animalInformation/{animal_id}', Genis\AnimalInformationAction::class);
     $app->get('/', function (Request $request, Response $response)
     {
         $response->getBody()->write('hello world');
