@@ -32,17 +32,19 @@ final class DatabaseExportAction {
             case 'export_internal':
                 $result = $this->db_exporter->export_database_internal();
                 $response->getBody()->write($result);
+                return $response->withHeader('Content-Type', 'application/json')
+                    ->withStatus(201);
                 break;
             case 'export_external':
                 $result = $this->db_exporter->export_database_external();
                 $response->getBody()->write($result);
+                return $response->withHeader('Content-Type', 'application/json')
+                    ->withStatus(201);
                 break;
             default:
                 $response->getBody()->write('Method not allowed');
+                return $response->withHeader('Content-Type', 'text/plain')
+                    ->withStatus(405);
         }
-        
-        return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus(201);;
     }
 }
