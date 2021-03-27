@@ -12,15 +12,15 @@
  * @author Christophe
  */
 namespace Genis\Domain\Animal\Services;
-use Genis\Domain\Animal\Repositories\AnimalReaderRepository as AnimalReaderRepository;
+use Genis\Domain\Animal\Repositories\AnimalsExportReaderRepository as AnimalsExportReaderRepository;
 
 class DatabaseExporter {
     private $export_paths;
     private $repository;
     const EXPORT_TYPE_INTERNAL = 'export_interne';
-    const EXPORT_TYPE_INTRANET = 'export_intratnet';
+    const EXPORT_TYPE_INTRANET = 'export_intranet';
 
-    public function __construct($export_paths, AnimalReaderRepository $repository) {
+    public function __construct($export_paths, AnimalsExportReaderRepository $repository) {
         $this->export_paths = $export_paths;
         $this->repository = $repository;
     }
