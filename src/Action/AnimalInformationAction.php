@@ -27,8 +27,8 @@ class AnimalInformationAction {
     
     public function __invoke(Request $request, Response $response, array $args) : Response
     {
-        
-        $result = $this->animal_information_retriever->get_animal_information($args['animal_id']);
+        $params = $request->getQueryParams();
+        $result = $this->animal_information_retriever->get_animal_information($args['animal_id'], $params);
         
         $response->getBody()->write($result);
         
