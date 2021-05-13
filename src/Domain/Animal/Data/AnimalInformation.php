@@ -30,6 +30,8 @@ class AnimalInformation {
     public $nom_mere;
     public $no_identification_pere;
     public $no_identification_mere;
+    public $father_information;
+    public $mother_information;
 
     public function __set($id_animal, $value) {}
 }

@@ -23,7 +23,7 @@ class AnimalReaderRepository {
         $this->connection = $pdo;
     }
     
-    public function read_animal_information($animal_id, $include_genetic_information): object {
+    public function read_animal_information($animal_id, $include_genetic_information, $include_parents_information): object {
         $sql = "SELECT animal.*, pere.nom_animal as nom_pere, mere.nom_animal as nom_mere, "
                 . "pere.no_identification as no_identification_pere, mere.no_identification as no_identification_mere "
                 . "FROM animal "
@@ -39,6 +39,10 @@ class AnimalReaderRepository {
             $animal_information = $this->extend_with_genetic_information($animal_information);
         } else {
             $animal_information = $animal_information_result_set->fetchObject("Genis\Domain\Animal\Data\AnimalInformation");
+        }
+        
+        if ($include_parents_information) {
+            $animal_information = $this->extend_with_parents_information($animal_information);
         }
         
         return $animal_information;
@@ -216,5 +220,19 @@ class AnimalReaderRepository {
         $stmt->closeCursor();
         $result = $this->connection->query("SELECT @FemaleAncestorName AS famille")->fetch(PDO::FETCH_ASSOC);
         return $result['famille'];
+    }
+    
+    private function extend_with_parents_information($animal_information) {
+        if ($animal_information->id_pere != 1) {
+            $father_information = $this->read_animal_information($animal_information->id_pere, 1, 0);
+            $animal_information->father_information = $father_information;
+        }
+        
+        if ($animal_information->id_mere != 2) {
+            $mother_information = $this->read_animal_information($animal_information->id_mere, 1, 0);
+            $animal_information->mother_information = $mother_information;
+        }
+        
+        return $animal_information;
     }
 }

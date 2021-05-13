@@ -20,11 +20,13 @@ use Psr\Http\Message\ResponseInterface as Response;
 class AnimalInformationAction {
     private $animal_information_retriever;
     private const AUTHORIZED_PARAMETERS_FILTERS = [
-        "include_genetic_information" => "verify_param_include_genetic_information",
-        "XDEBUG_SESSION_START" => "verify_param_xdebug_session_start"
+        "include_genetic_information" => "verify_boolean_parameter",
+        "XDEBUG_SESSION_START" => "verify_param_xdebug_session_start",
+        "include_parents_information" => "verify_boolean_parameter"
     ];
     private $filtered_query_parameters = [
         "include_genetic_information" => false,
+        "include_parents_information" => false
     ];
     
     public function __construct(AnimalInformationRetriever $animal_information_retriever)
@@ -79,7 +81,7 @@ class AnimalInformationAction {
         ];
         
         if (array_key_exists($param_key, self::AUTHORIZED_PARAMETERS_FILTERS)){
-            $param_verification_result = $this->{ self::AUTHORIZED_PARAMETERS_FILTERS[$param_key]}($param_value);
+            $param_verification_result = $this->{ self::AUTHORIZED_PARAMETERS_FILTERS[$param_key]}($param_key, $param_value);
             if ($param_verification_result == false) {
                 $verification_result["is_valid"] = false;
                 $verification_result["message"] = "Given value '$param_value' for parameter '$param_key' is not accepted.";
@@ -92,17 +94,17 @@ class AnimalInformationAction {
         return $verification_result;
     }
     
-    private function verify_param_include_genetic_information(string $param_value): bool {
+    private function verify_boolean_parameter(string $param_key, string $param_value): bool {
         $result = filter_var($param_value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if (is_bool($result)) {
-            $this->filtered_query_parameters["include_genetic_information"] = $result;
+            $this->filtered_query_parameters[$param_key] = $result;
             return true;
         } else {
             return false;
         }
     }
     
-    private function verify_param_xdebug_session_start(string $param_value): bool {
+    private function verify_param_xdebug_session_start(string $param_key, string $param_value): bool {
         return ($param_value == "netbeans-xdebug") ? true : false;
     }
 }

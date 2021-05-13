@@ -22,7 +22,7 @@ class AnimalInformationRetriever {
     }
     
     public function get_animal_information(int $animal_id, array $optional_query_params) {
-        $result = $this->repository->read_animal_information($animal_id, $optional_query_params["include_genetic_information"]);
+        $result = $this->repository->read_animal_information($animal_id, $optional_query_params["include_genetic_information"], $optional_query_params["include_parents_information"]);
         
         return json_encode($result);
     }
