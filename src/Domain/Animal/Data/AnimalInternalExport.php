@@ -18,7 +18,7 @@ class AnimalInternalExport {
     /**
      *IMPORTANT: DO NOT CHANGE PROPERTY NAMES!!!
      * If names need to be changed, make sure to adjust the read_all_animals_for_export()
-     * method in the Genis\Domain\Animal\Repositories\AnimalReaderRepository class!!
+     * method in the Genis\Domain\Animal\Repositories\AnimalsExportReaderRepository class!!
      */
     public $nom;
     public $no_identification;

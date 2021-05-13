@@ -12,8 +12,10 @@ use Slim\App as App;
 use Slim\Factory\AppFactory as AppFactory;
 use Slim\Middleware\ErrorMiddleware as ErrorMiddleware;
 use Nyholm\Dsn\DsnParser;
+use Genis\Domain\Animal\Repositories\AnimalsExportReaderRepository as AnimalsExportReaderRepository;
 use Genis\Domain\Animal\Repositories\AnimalReaderRepository as AnimalReaderRepository;
 use Genis\Domain\Animal\Services\DatabaseExporter as DatabaseExporter;
+use Genis\Domain\Animal\Services\AnimalInformationRetriever as AnimalInformationRetriever;
 
 return [
     'settings' => function() {
@@ -55,8 +57,14 @@ return [
         $export_paths['pedig_results_path'] = $container->get('settings')['pedig_results_path'];
         
         $pdo = $container->get(PDO::class);
-        $repository = new AnimalReaderRepository($pdo);
+        $repository = new AnimalsExportReaderRepository($pdo);
         return new DatabaseExporter($export_paths, $repository);
+    },
+    
+    AnimalInformationRetriever::class => function (ContainerInterface $container) {
+        $pdo = $container->get(PDO::class);
+        $repository = new AnimalReaderRepository($pdo);
+        return new AnimalInformationRetriever($repository);
     }
 ];
 
