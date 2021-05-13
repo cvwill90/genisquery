@@ -26,17 +26,10 @@ class AnimalInformation {
     public $code_race;
     public $id_pere;
     public $id_mere;
-    public $type_ancetre;
-    public $pourcentage_sang_race;
-    public $id_livre;
-    public $lib_livre;
     public $nom_pere;
     public $nom_mere;
     public $no_identification_pere;
     public $no_identification_mere;
-    public $famille;
-    public $lignee;
-
 
     public function __set($id_animal, $value) {}
 }
