@@ -52,7 +52,7 @@ class AnimalInformationAction {
         }
     }
     
-    private function verify_query_params_validity($query_params): array {
+    private function verify_query_params_validity(array $query_params): array {
         $params_verification_result = [
             "params_valid" => true,
             "message" => "Query parameters are valid"
@@ -69,7 +69,7 @@ class AnimalInformationAction {
         return $params_verification_result;
     }
     
-    private function verify_param_validity($param_key, $param_value): array {
+    private function verify_param_validity(string $param_key, string $param_value): array {
         $verification_result = [
             "is_valid" => true,
             "message" => ""
@@ -89,12 +89,12 @@ class AnimalInformationAction {
         return $verification_result;
     }
     
-    private function verify_param_include_genetic_information($param_value): bool {
+    private function verify_param_include_genetic_information(string $param_value): bool {
         $result = filter_var($param_value, FILTER_VALIDATE_BOOLEAN);
         return $result;
     }
     
-    private function verify_param_xdebug_session_start($param_value): bool {
+    private function verify_param_xdebug_session_start(string $param_value): bool {
         return ($param_value == "netbeans-xdebug") ? true : false;
     }
 }
