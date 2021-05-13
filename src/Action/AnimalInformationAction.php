@@ -19,9 +19,12 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 class AnimalInformationAction {
     private $animal_information_retriever;
-    private const AUTHORIZED_PARAMTERS_FILTERS = [
+    private const AUTHORIZED_PARAMETERS_FILTERS = [
         "include_genetic_information" => "verify_param_include_genetic_information",
         "XDEBUG_SESSION_START" => "verify_param_xdebug_session_start"
+    ];
+    private $filtered_query_parameters = [
+        "include_genetic_information" => false,
     ];
     
     public function __construct(AnimalInformationRetriever $animal_information_retriever)
@@ -36,7 +39,7 @@ class AnimalInformationAction {
         $query_params_verification_result = $this->verify_query_params_validity($params);
         
         if ($query_params_verification_result["params_valid"]) {
-            $result = $this->animal_information_retriever->get_animal_information($args['animal_id'], $params);
+            $result = $this->animal_information_retriever->get_animal_information($args['animal_id'], $this->filtered_query_parameters);
             
             $response->getBody()->write($result);
         
@@ -75,8 +78,8 @@ class AnimalInformationAction {
             "message" => ""
         ];
         
-        if (array_key_exists($param_key, self::AUTHORIZED_PARAMTERS_FILTERS)){
-            $param_verification_result = $this->{ self::AUTHORIZED_PARAMTERS_FILTERS[$param_key]}($param_value);
+        if (array_key_exists($param_key, self::AUTHORIZED_PARAMETERS_FILTERS)){
+            $param_verification_result = $this->{ self::AUTHORIZED_PARAMETERS_FILTERS[$param_key]}($param_value);
             if ($param_verification_result == false) {
                 $verification_result["is_valid"] = false;
                 $verification_result["message"] = "Given value '$param_value' for parameter '$param_key' is not accepted.";
@@ -90,8 +93,13 @@ class AnimalInformationAction {
     }
     
     private function verify_param_include_genetic_information(string $param_value): bool {
-        $result = filter_var($param_value, FILTER_VALIDATE_BOOLEAN);
-        return $result;
+        $result = filter_var($param_value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if (is_bool($result)) {
+            $this->filtered_query_parameters["include_genetic_information"] = $result;
+            return true;
+        } else {
+            return false;
+        }
     }
     
     private function verify_param_xdebug_session_start(string $param_value): bool {
