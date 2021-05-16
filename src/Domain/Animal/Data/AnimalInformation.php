@@ -19,6 +19,11 @@ class AnimalInformation {
     public $sexe;
     public $no_identification;
     public $date_naiss;
+    public $id_elevage_naiss;
+    public $nom_elevage_naiss;
+    public $date_mort;
+    public $id_elevage_mort;
+    public $nom_elevage_mort;
     public $reproducteur;
     public $fecondation;
     public $coeff_consang;
