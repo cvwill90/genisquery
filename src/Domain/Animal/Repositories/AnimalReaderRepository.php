@@ -24,14 +24,16 @@ class AnimalReaderRepository {
     }
     
     public function read_animal_information($animal_id, $include_genetic_information, $include_parents_information): object {
-        $sql = "SELECT animal.*, pere.nom_animal as nom_pere, mere.nom_animal as nom_mere, "
-                . "pere.no_identification as no_identification_pere, mere.no_identification as no_identification_mere "
-                . "FROM animal "
-                . "LEFT JOIN ancetre ON ancetre.id_ancetre = animal.id_animal "
-                . "LEFT JOIN animal pere ON pere.id_animal=animal.id_pere "
-                . "LEFT JOIN animal mere ON mere.id_animal=animal.id_mere "
-                . "LEFT JOIN livre_genealogique livre ON livre.id_livre=ancetre.id_livre "
-                . "WHERE animal.id_animal=$animal_id";
+        $sql = "SELECT animal.*, pere.nom_animal as nom_pere, mere.nom_animal as nom_mere, pere.no_identification as no_identification_pere, mere.no_identification as no_identification_mere, mort.date_sortie as date_mort, mort.id_elevage as id_elevage_mort, mort.nom_elevage as nom_elevage_mort, naissance.id_elevage as id_elevage_naiss, naissance.nom_elevage as nom_elevage_naiss 
+                FROM animal 
+                LEFT JOIN (SELECT id_animal, date_entree, elevage.id_elevage, nom_elevage FROM periode LEFT JOIN elevage ON elevage.id_elevage=periode.id_elevage WHERE id_type=3) naissance ON naissance.id_animal=animal.id_animal 
+                LEFT JOIN (SELECT id_animal, date_sortie, elevage.id_elevage, nom_elevage FROM periode LEFT JOIN elevage ON elevage.id_elevage=periode.id_elevage WHERE id_type=1) mort ON mort.id_animal=animal.id_animal 
+                LEFT JOIN ancetre ON ancetre.id_ancetre = animal.id_animal 
+                LEFT JOIN animal pere ON pere.id_animal=animal.id_pere 
+                LEFT JOIN animal mere ON mere.id_animal=animal.id_mere 
+                LEFT JOIN livre_genealogique livre ON livre.id_livre=ancetre.id_livre
+                WHERE animal.id_animal=$animal_id";
+        
         $animal_information_result_set = $this->connection->query($sql);
         
         if ($include_genetic_information) {
